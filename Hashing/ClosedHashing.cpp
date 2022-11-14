@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 
 struct closehashing
@@ -15,10 +16,12 @@ struct closehashing
             HT[i] = -1;
         }
     }
-    void Insert(int *arr, int length)
+    void Insert(vector<int> arr)
     {
-        for (int i = 0; i < length; i++)
+        int filledcells = 0;
+        for (int i = 0; i < arr.size(); i++)
         {
+            load_factor = float(filledcells) / float(HS);
             if (load_factor <= 0.5)
             {
                 HI = arr[i] % HS;
@@ -30,25 +33,29 @@ struct closehashing
                         j = (j + 1) % HS;
                     }
                     HT[j] = arr[i];
+                    filledcells++;
                 }
                 else
                 {
                     HT[HI] = arr[i];
+                    filledcells++;
                 }
             }
-        }
-    }
-    int filledcells()
-    {
-        int count = 0;
-        for (int i = 0; i < HS; i++)
-        {
-            if (HT[i] != -1)
+            else
             {
-                count++;
+                HS = HS * 2;
+                delete[] HT;
+                HT = NULL;
+                int *newHT = new int[HS];
+                for (int i = 0; i < HS; i++)
+                {
+                    newHT[i] = -1;
+                }
+                HT = newHT;
+                i = -1;
+                filledcells = 0;
             }
         }
-        return count;
     }
     void display()
     {
@@ -58,12 +65,17 @@ struct closehashing
         }
         cout << endl;
     }
+    ~closehashing()
+    {
+        delete[] HT;
+        HT = NULL;
+    }
 };
 int main()
 {
-    int arr[] = {1, 13, 16, 28, 19, 39};
+    vector<int> arr = {19, 9, 29, 39, 1, 2, 3, 4, 5, 10, 77};
     closehashing h;
-    h.Insert(arr, 6);
+    h.Insert(arr);
     h.display();
     return 0;
 }
