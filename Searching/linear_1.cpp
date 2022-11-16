@@ -1,23 +1,39 @@
 #include <iostream>
 using namespace std;
 
-int search(int arr[], int n, int x)
+void search(int arr[], int n, int x)
 {
-    for (int i = 0; i < n; i++)
+
+    int flag = 0;
+    int count = 0;
+    int i = 0;
+    while (i < n)
     {
-        if (arr[i] == x)
+        if (arr[i] != x)
         {
-            return i;
+            i++;
+            count++;
+        }
+        else
+        {
+            flag = 1;
+            break;
         }
     }
-    return -1;
+
+    if (flag == 1)
+        cout << "found at index: " << count + 1;
+
+    else
+        cout << "not found";
 }
 
 int main()
 {
+
     int arr[] = {3, 4, 6, 1, 5};
-    int x = 5;
+    int x = 6;
     int n = sizeof(arr);
-    int result = search(arr, n, x);
-    (result == -1) ? cout << "Element not present" : cout << "Found at index: " << result;
+    search(arr, n, x);
+    // (result == -1) ? cout << "Element not present" : cout << "Found at index: " << result;
 }
